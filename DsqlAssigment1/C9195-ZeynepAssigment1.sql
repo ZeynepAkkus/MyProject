@@ -1,5 +1,5 @@
 use SampleSales;
------ a.	Create above table (transactions) and insert values,
+
 
 
 CREATE TABLE	Transactions (
@@ -19,22 +19,9 @@ VALUES
 (33,11,500,'20210521'),
 (33,22,750,'20210521'),
 (11,44,300,'20210522')
-/*
-INSERT INTO Transactions (Sender_ID  , Receiver_ID,  Amount, Transaction_Date)VALUES('55', '22', '500', '18-05-2021');
-INSERT INTO Transactions (Sender_ID  , Receiver_ID,  Amount, Transaction_Date)VALUES('11',	'33',	'350',	'19-05-2021');
-INSERT INTO Transactions (Sender_ID  , Receiver_ID,  Amount, Transaction_Date)VALUES('22',	'11',	'650',	'19-05-2021');
-INSERT INTO Transactions (Sender_ID  , Receiver_ID,  Amount, Transaction_Date)VALUES('22',	'33',	'900',	'20-05-2021');
-INSERT INTO Transactions (Sender_ID  , Receiver_ID,  Amount, Transaction_Date)VALUES('33',	'11',	'500',	'21-05-2021');
-INSERT INTO Transactions (Sender_ID  , Receiver_ID,  Amount, Transaction_Date)VALUES('33',	'22',	'750',	'21-05-2021');
-INSERT INTO Transactions (Sender_ID  , Receiver_ID,  Amount, Transaction_Date)VALUES('11',	'44',	'300',	'22-05-2021');
-*/
 
---TRUNCATE table Transactions;
 select * from Transactions
---drop table Transactions
 
-
------- b.	Sum amounts for each sender (debits) and receiver (credits),
 
 select Sender_ID, SUM (Amount) As Sender
 from Transactions
@@ -44,11 +31,6 @@ select Receiver_ID, SUM (Amount) As Receiver
 from Transactions
 group by Receiver_ID;
 
-------- c.	Full (outer) join debits and credits tables on account id, taking net change as difference
--------     between credits and debits, coercing nulls to zeros with coalesce()
-
-
--- >>>  coalesce(): birleştirmek
 
 SELECT coalesce(S.Sender_ID, R.Receiver_ID) as Account_ID, (coalesce(R.Receiver, 0) -coalesce( S.Sender,0)) as Net_Change 
 from (select Sender_ID, SUM (Amount) As Sender
